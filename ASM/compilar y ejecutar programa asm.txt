@@ -1,0 +1,3 @@
+ml /c /coff /fl nombre.asm
+link /map /subsystem:console nombre
+nombre.exe

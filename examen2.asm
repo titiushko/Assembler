@@ -15,6 +15,7 @@ includelib \masm32\lib\masm32.lib
 	MSJ1 DB "TECLEE UN CARACTER: ",0
 	MSJ2 DB "TECLEE UN OTRO CARACTER: ",0
 	MSJ3 DB "REALIZAR OTRA COMPARACION??(S/N): ",0
+	CAR0 DB 2 DUP(" "),0
 	CAR1 DB 2 DUP(" "),0
 	CAR2 DB 2 DUP(" "),0
 	RES1 DB "BIT 3 SON IGUALES",0
@@ -37,21 +38,23 @@ ENTRAR:
 	invoke locate,0,0
 	invoke StdOut,ADDR MSJ1
 	invoke StdIn,ADDR CAR1,LENGTHOF CAR1
-	MOV [ESI],EAX
-	INC ESI
-	MOV [ESI],BYTE PTR"$"
+	;MOV [ESI],CAR1
+	;INC ESI
+	;MOV [ESI],WORD PTR
 
 	;SEGUNDO CARACTER
 	invoke locate,0,1
 	invoke StdOut,ADDR MSJ2
 	invoke StdIn,ADDR CAR2,LENGTHOF CAR2
-	MOV [EDI],EAX
-	INC EDI
-	MOV [EDI],BYTE PTR"$"
+	;MOV [EDI],CAR2
+	;INC EDI
+	;MOV [EDI],WORD PTR
 	
 	;COMPARACION
-	MOV EAX,[ESI-1]
-	CMP EAX,[EDI-1]
+	;MOV EAX,[ESI-1]
+	;MOV EAX,[ESI-1]
+	;CMP EAX,[EDI-1]
+	CMP ESI,EDI
 	
 	;SON IGUALES
 	JE IGUALES
@@ -62,7 +65,7 @@ ENTRAR:
 	JMP FINAL
 	
 IGUALES:
-	invoke locate,0,3
+	invoke locate,0,2
 	invoke StdOut,ADDR RES1
 	JMP VALOR
 
@@ -79,23 +82,22 @@ VALOR:
 	JE SON_UNO
 	
 	;SON CERO
-	invoke locate,0,4
+	invoke locate,0,3
 	invoke StdOut,ADDR RES2
 	JMP FINAL
 	
 SON_UNO:
-	invoke locate,0,4
+	invoke locate,0,3
 	invoke StdOut,ADDR RES3
 
 FINAL:
 	;SALIR?
-	invoke locate,0,5
+	invoke locate,0,4
 	invoke StdOut,ADDR MSJ3
-	MOV EBX,01H
-	INT 21H
-	CMP EAX,"N"
+	invoke StdIn,ADDR CAR0,LENGTHOF CAR0
+	CMP CAR0,"N"
 	JE SALIR
-	CMP EAX,"n"
+	CMP CAR0,"n"
 	JE SALIR
 	JNE SALTO
 

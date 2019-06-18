@@ -18,23 +18,36 @@ buffer 			db 127 dup(" "),0
 txt_title 		db "-----------EJEMPLO DE Bin2Byte_Ex-----------",0
 txt_description db "Es una conversion de alta velocidad de un valor de notacion BINARIA a un valor de BYTE",0
 message 		db "Digitar un valor en BINARIO: ",0
-result 			db "Resultado en BYTE: ",0
+result_p1 		db "Resultado: ",0
+result_p2 		db " se pudo realizar la conversion a BYTE",0
+result_si 		db "si",0
+result_no 		db "no",0
 
 .code
 start:
+	MOV EBX,-1
 	invoke ClearScreen
 	invoke locate,10,0
 	invoke StdOut,ADDR txt_title
 	invoke locate,0,1
 	invoke StdOut,ADDR txt_description
-	invoke locate,0,6
+	invoke locate,0,4
 	invoke StdOut,ADDR message
 	invoke StdIn,ADDR buffer,LENGTHOF buffer
+	invoke locate,0,5
+	invoke StdOut,ADDR result_p1
 	invoke bin2byte_ex,ADDR buffer
-	PrintDec eax, "Valor en Decimal" ; Si eax = -1, entonces no se pudo realizar la conversión
-	invoke locate,0,7
-	invoke StdOut,ADDR result
-	invoke StdOut,ADDR buffer
+	;PrintDec EAX, "Valor en Decimal" ; Si EAX = -1, entonces no se pudo realizar la conversión
+	CMP EAX,EBX
+	JE INCORRECTO
+CORRECTO:
+	invoke StdOut,ADDR result_si
+	JMP FIN
+INCORRECTO:
+	invoke StdOut,ADDR result_no
+	JMP FIN
+FIN:
+	invoke StdOut,ADDR result_p2
 	invoke locate,0,10
 	invoke ExitProcess,0
 	end start
